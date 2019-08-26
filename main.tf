@@ -31,10 +31,10 @@ resource "aws_elasticache_parameter_group" "redis_parameter_group" {
 
   # Strip the patch version from redis_version var
   family    = "redis${replace(var.redis_version, "/\\.[\\d]+$/","")}"
-  parameter {
+/*   parameter {
     name  = "${var.redis_parameters}"
     value = "${var.redis_parameters}"
-  }
+  } */
 
   lifecycle {
     create_before_destroy = true
@@ -43,5 +43,5 @@ resource "aws_elasticache_parameter_group" "redis_parameter_group" {
 
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   name       = "${replace(format("%.255s", lower(replace("tf-redis-${var.name}-${var.env}-${data.aws_vpc.vpc.tags["Name"]}", "_", "-"))), "/\\s/", "-")}"
-  subnet_ids = ["${var.subnets}"]
+  subnet_ids = var.subnets
 }
